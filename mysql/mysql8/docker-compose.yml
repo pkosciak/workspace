@@ -1,0 +1,24 @@
+version: '3.7'
+
+services:
+  mysql8:
+    image: mysql:8
+    container_name: mysql8
+    volumes:
+      - mysql8-data:/var/lib/mysql
+    networks:
+      - proxy
+      - default
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - 3306:3306
+
+volumes:
+  mysql8-data:
+    name: mysql8-data
+
+networks:
+  proxy:
+    external: true
