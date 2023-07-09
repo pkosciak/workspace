@@ -2,7 +2,7 @@ version: "3.3"
 
 services:
     php:
-        container_name: php-${APP_NAME}
+        container_name: ${APP_NAME}-php
         build:
             context: .
             dockerfile: Dockerfile
@@ -11,7 +11,7 @@ services:
         volumes:
             - ./src:/var/www/html
     nginx:
-        container_name: nginx-${APP_NAME}
+        container_name: ${APP_NAME}-nginx
         image: nginx:stable-alpine
         labels:
             - "traefik.enable=true"
@@ -20,14 +20,25 @@ services:
             - "traefik.http.routers.${APP_NAME}.tls=true"
         networks:
             - proxy
-        environment:
-            APP_NAME: ${APP_NAME}
         volumes:
             - ./src:/var/www/html
             - ./.docker/nginx/logs:/var/log/nginx
             - ./.docker/nginx/conf:/etc/nginx/templates
-        depends_on:
-            - php
+        environment:
+            APP_NAME: ${APP_NAME}
+    mysql:
+        image: mysql:8
+        container_name: ${APP_NAME}-mysql
+        volumes:
+            - ./.docker/mysql/data:/var/lib/mysql
+            - ./.docker/mysql/my.cnf:/etc/mysql/my.cnf
+        networks:
+            - proxy
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+        ports:
+            - ${DB_PORT}:3306
 
 networks:
     proxy:

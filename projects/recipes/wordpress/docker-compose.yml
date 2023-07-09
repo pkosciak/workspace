@@ -1,0 +1,59 @@
+version: "3.3"
+
+services:
+    php:
+        container_name: ${APP_NAME}-php
+        build:
+            context: .
+            dockerfile: Dockerfile
+        networks:
+            - proxy
+        volumes:
+            - ./src:/var/www/html
+    nginx:
+        container_name: ${APP_NAME}-nginx
+        image: nginx:stable-alpine
+        labels:
+            - "traefik.enable=true"
+            - "traefik.docker.network=proxy"
+            - "traefik.http.routers.${APP_NAME}.rule=Host(`${APP_NAME}.docker.localhost`)"
+            - "traefik.http.routers.${APP_NAME}.tls=true"
+        networks:
+            - proxy
+        volumes:
+            - ./src:/var/www/html
+            - ./.docker/nginx/logs:/var/log/nginx
+            - ./.docker/nginx/conf:/etc/nginx/templates
+        environment:
+            APP_NAME: ${APP_NAME}
+    wpcli:
+        container_name: ${APP_NAME}-cli
+        image: wordpress:cli-2.8.1-php8.1
+        user: 1000:1000
+        command: tail -f /dev/null
+        volumes:
+            - ./src:/var/www/html
+        environment:
+            WORDPRESS_DB_HOST: ${APP_NAME}-mysql
+            WORDPRESS_DB_USER: root
+            WORDPRESS_DB_PASSWORD: root
+            WORDPRESS_DB_NAME: ${APP_NAME}
+        networks:
+            - proxy
+    mysql:
+        image: mysql:8
+        container_name: ${APP_NAME}-mysql
+        volumes:
+            - ./.docker/mysql/data:/var/lib/mysql
+            - ./.docker/mysql/my.cnf:/etc/mysql/my.cnf
+        networks:
+            - proxy
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+        ports:
+            - ${DB_PORT}:3306
+
+networks:
+    proxy:
+        external: true

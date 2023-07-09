@@ -1,10 +1,11 @@
-FROM php:8.0.15-fpm-alpine
+FROM php:8.1-fpm-alpine
+
+RUN apk update && apk add bash subversion mysql mysql-client
 
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 
 RUN chmod +x /usr/local/bin/install-php-extensions && sync \
     && install-php-extensions pdo_mysql \
-        fileinfo \
         mysqli \
         xdebug \
 		gd
@@ -15,13 +16,6 @@ RUN wget https://github.com/mailhog/mhsendmail/releases/download/v0.2.0/mhsendma
 RUN chmod +x mhsendmail_linux_amd64
 RUN mv mhsendmail_linux_amd64 /usr/local/bin/mhsendmail
 
-RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
-    chmod +x wp-cli.phar && \
-    mv wp-cli.phar /usr/local/bin/wp-cli.phar && \
-    echo '#!/bin/sh' >> /usr/local/bin/wp && \
-    echo 'wp-cli.phar "$@" --allow-root' >> /usr/local/bin/wp && \
-    chmod +x /usr/local/bin/wp
-	
 RUN apk add --update linux-headers
 
 RUN apk --no-cache add shadow && usermod -u 1000 www-data

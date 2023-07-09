@@ -1,10 +1,14 @@
-FROM php:8.0.15-fpm-alpine
+FROM php:8.1-fpm-alpine
+
+RUN apk update && apk add bash subversion mysql mysql-client
 
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 
 RUN chmod +x /usr/local/bin/install-php-extensions && sync \
-    && install-php-extensions pdo_mysql
-
+    && install-php-extensions pdo_mysql \
+        mysqli \
+        xdebug \
+		gd
 
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
