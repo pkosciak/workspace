@@ -59,18 +59,22 @@ mailhog.docker.localhost
 
 ## Project setup
 
-Clone recipe
+Clone recipe from recipes directory into projects directory
 
-Edit .env file
+Change directory name
 
-Run command:
+Edit .env file to your preferences
+
+Put your application files into src directory
+
+In project directory (not src) run command:
 ```
 docker-compose up -d
 ```
 
 ## Recreate project
 
-In case you need to change Dockerfile inside your project just run command:
+In case you need to change Dockerfile inside your project run command:
 
 ```
 docker-compose up -d --build --force-recreate
