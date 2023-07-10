@@ -15,6 +15,8 @@ mkcert -install
 mkcert "docker.localhost" "*.docker.localhost"
 ```
 
+Important: You may need to restart chrome to see your project as secure
+
 ## Traefik setup
 
 In traefik directory run command
