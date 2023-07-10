@@ -53,11 +53,7 @@ In elasticsearch directory run command
 docker-compose up -d
 ```
 
-to see inbox, visit:
-
-```
-mailhog.docker.localhost
-```
+To connect to elastic search use hostname: elasticsearch
 
 ## Project setup
 
