@@ -4,7 +4,6 @@ services:
   reverse-proxy:
     image: traefik:v2.5
     container_name: traefik
-    restart: unless-stopped
     security_opt:
       - no-new-privileges:true
     ports:
