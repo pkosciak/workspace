@@ -48,7 +48,6 @@ services:
             - ./.docker/mysql/my.cnf:/etc/mysql/my.cnf
         networks:
             - proxy
-        restart: always
         environment:
             MYSQL_ROOT_PASSWORD: root
         ports:
