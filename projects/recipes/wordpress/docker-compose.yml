@@ -28,7 +28,7 @@ services:
             APP_NAME: ${APP_NAME}
     wpcli:
         container_name: ${APP_NAME}-cli
-        image: wordpress:cli-2.8.1-php8.1
+        image: ${WPCLI_IMAGE}
         user: 1000:1000
         command: tail -f /dev/null
         volumes:
@@ -36,12 +36,12 @@ services:
         environment:
             WORDPRESS_DB_HOST: ${APP_NAME}-mysql
             WORDPRESS_DB_USER: root
-            WORDPRESS_DB_PASSWORD: root
+            WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD}
             WORDPRESS_DB_NAME: ${APP_NAME}
         networks:
             - proxy
     mysql:
-        image: mysql:8
+        image: ${MYSQL_IMAGE}
         container_name: ${APP_NAME}-mysql
         volumes:
             - ./.docker/mysql/data:/var/lib/mysql
@@ -49,9 +49,14 @@ services:
         networks:
             - proxy
         environment:
-            MYSQL_ROOT_PASSWORD: root
+            MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
         ports:
             - ${DB_PORT}:3306
+    redis:
+        container_name: ${APP_NAME}-redis
+        image: redis
+        networks:
+            - proxy
 
 networks:
     proxy:

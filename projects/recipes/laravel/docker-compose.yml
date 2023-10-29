@@ -27,17 +27,22 @@ services:
         environment:
             APP_NAME: ${APP_NAME}
     mysql:
-        image: mysql:8
         container_name: ${APP_NAME}-mysql
+        image: ${MYSQL_IMAGE}
         volumes:
             - ./.docker/mysql/data:/var/lib/mysql
             - ./.docker/mysql/my.cnf:/etc/mysql/my.cnf
         networks:
             - proxy
         environment:
-            MYSQL_ROOT_PASSWORD: root
+            MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
         ports:
             - ${DB_PORT}:3306
+    redis:
+        container_name: ${APP_NAME}-redis
+        image: redis
+        networks:
+            - proxy
 
 networks:
     proxy:

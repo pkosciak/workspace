@@ -5,6 +5,7 @@ define('WP_DEBUG_DISPLAY', false);
 define('SCRIPT_DEBUG', true);
 
 @ini_set('display_errors', 0);
+//@ini_set( 'memory_limit', -1 );
 
 /** Docker redirection loop fix */
 define('FORCE_SSL_ADMIN', true);

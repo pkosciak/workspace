@@ -4,6 +4,8 @@ if(file_exists(__DIR__ . '/wp-config.dev.php')){
     include_once __DIR__ . '/wp-config.dev.php';
 }
 
+//define('WP_REDIS_HOST', '');
+
 define('DB_NAME', '');
 define('DB_USER', '');
 define('DB_PASSWORD', '');

@@ -1,4 +1,4 @@
-FROM php:8.1-fpm-alpine
+FROM ${PHP_IMAGE}
 
 RUN apk update && apk add bash subversion mysql mysql-client
 
