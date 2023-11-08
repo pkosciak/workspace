@@ -34,29 +34,30 @@ services:
         volumes:
             - ./src:/var/www/html
         environment:
-            WORDPRESS_DB_HOST: ${APP_NAME}-mysql
+            WORDPRESS_DB_HOST: ${MYSQL_HOST}
             WORDPRESS_DB_USER: root
-            WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD}
+            WORDPRESS_DB_PASSWORD: root
             WORDPRESS_DB_NAME: ${APP_NAME}
         networks:
             - proxy
-    mysql:
-        image: ${MYSQL_IMAGE}
-        container_name: ${APP_NAME}-mysql
-        volumes:
-            - ./.docker/mysql/data:/var/lib/mysql
-            - ./.docker/mysql/my.cnf:/etc/mysql/my.cnf
-        networks:
-            - proxy
-        environment:
-            MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
-        ports:
-            - ${DB_PORT}:3306
-    redis:
-        container_name: ${APP_NAME}-redis
-        image: redis
-        networks:
-            - proxy
+#    mysql:
+#        image: ${MYSQL_IMAGE}
+#        container_name: ${APP_NAME}-mysql
+#        volumes:
+#            - ./.docker/mysql/data:/var/lib/mysql
+#            - ./.docker/mysql/my.cnf:/etc/mysql/my.cnf
+#        networks:
+#            - proxy
+#        environment:
+#            MYSQL_ROOT_PASSWORD: root
+#        ports:
+#            - ${DB_PORT}:3306
+
+#    redis:
+#        container_name: ${APP_NAME}-redis
+#        image: redis
+#        networks:
+#            - proxy
 
 networks:
     proxy:

@@ -93,22 +93,6 @@ To exit use
 exit
 ```
 
-## Using redis cli
-
-Replace APP_NAME with your app name
-
-```
-docker exec -it APP_NAME-redis bash
-```
-```
-redis-cli
-```
-
-To exit use
-```
-exit
-```
-
 ## WPCLI (wordpress recipe)
 
 Replace APP_NAME with your app name
