@@ -88,11 +88,6 @@ Replace APP_NAME with your app name
 docker exec -it APP_NAME-php bash
 ```
 
-To exit use
-```
-exit
-```
-
 ## WPCLI (wordpress recipe)
 
 Replace APP_NAME with your app name

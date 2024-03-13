@@ -8,7 +8,10 @@ define('WP_DISABLE_FATAL_ERROR_HANDLER', true);
 @ini_set('display_errors', 0);
 //@ini_set( 'memory_limit', -1 );
 
-/** Docker redirection loop fix */
+/**
+ * Docker redirection loop fix
+ * use only if ssl certificate is working
+ */
 define('FORCE_SSL_ADMIN', true);
 if(!defined('WP_CLI')){
     if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && strpos($_SERVER['HTTP_X_FORWARDED_PROTO'], 'https') !== false){

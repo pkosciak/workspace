@@ -1,6 +1,6 @@
 FROM ${PHP_IMAGE}
 
-RUN apk update && apk add bash subversion mysql mysql-client
+RUN apk update && apk add bash subversion
 
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 

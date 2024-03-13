@@ -1,14 +1,14 @@
 FROM ${PHP_IMAGE}
 
-RUN apk update && apk add bash subversion mysql mysql-client
+RUN apk update && apk add bash subversion
 
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 
 RUN chmod +x /usr/local/bin/install-php-extensions && sync \
     && install-php-extensions pdo_mysql \
         mysqli \
-        xdebug \
 		gd
+#        xdebug
 
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
