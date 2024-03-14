@@ -19,6 +19,12 @@ Important: You may need to restart chrome to see your project as secure
 
 ## Traefik setup
 
+Create network:
+
+```
+docker network create proxy
+```
+
 In traefik directory run command
 
 ```
