@@ -6,7 +6,14 @@ define('SCRIPT_DEBUG', true);
 define('WP_DISABLE_FATAL_ERROR_HANDLER', true);
 
 @ini_set('display_errors', 0);
-//@ini_set( 'memory_limit', -1 );
+//@ini_set('memory_limit', -1);
+
+/**
+ * Disable sending emails
+ * enable only if you are using "WP Mail SMTP" plugin
+ */
+//define('WPMS_ON', true);
+//define('WPMS_DO_NOT_SEND', true);
 
 /**
  * Docker redirection loop fix
