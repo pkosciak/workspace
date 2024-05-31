@@ -8,6 +8,8 @@ services:
             dockerfile: Dockerfile
         networks:
             - proxy
+        extra_hosts:
+            - ${APP_NAME}.test:172.17.0.1
         volumes:
             - ./src:/var/www/html
     nginx:
