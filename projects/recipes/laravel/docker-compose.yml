@@ -32,14 +32,16 @@ services:
 
 #    httpd:
 #        container_name: ${APP_NAME}-httpd
-#        build:
-#            context: '.docker/httpd/'
+#        image: httpd:latest
 #        networks:
 #            - proxy
 #        extra_hosts:
 #            - ${APP_NAME}.test:172.17.0.1
 #        volumes:
 #            - ./src:/var/www/html
+#            - ./.docker/httpd/conf/httpd.conf:/usr/local/apache2/conf/httpd.conf
+#            - ./.docker/httpd/conf/sites-enabled:/usr/local/apache2/sites-enabled
+#            - ./.docker/httpd/logs:/usr/local/apache2/logs
 #        labels:
 #            - "traefik.enable=true"
 #            - "traefik.docker.network=proxy"
