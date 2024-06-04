@@ -12,6 +12,7 @@ services:
             - ${APP_NAME}.test:172.17.0.1
         volumes:
             - ./src:/var/www/html
+
     nginx:
         container_name: ${APP_NAME}-nginx
         image: nginx:stable-alpine
@@ -28,6 +29,25 @@ services:
             - ./.docker/nginx/conf:/etc/nginx/templates
         environment:
             APP_NAME: ${APP_NAME}
+
+#    httpd:
+#        container_name: ${APP_NAME}-httpd
+#        build:
+#            context: '.docker/httpd/'
+#        networks:
+#            - proxy
+#        extra_hosts:
+#            - ${APP_NAME}.test:172.17.0.1
+#        volumes:
+#            - ./src:/var/www/html
+#        labels:
+#            - "traefik.enable=true"
+#            - "traefik.docker.network=proxy"
+#            - "traefik.http.routers.${APP_NAME}.rule=Host(`${APP_NAME}.test`) || HostRegexp(`{subdomain:[a-z]+}.${APP_NAME}.test`)"
+#            - "traefik.http.routers.${APP_NAME}.tls=true"
+#        environment:
+#            APP_NAME: ${APP_NAME}
+
 #    mysql:
 #        image: mysql:8
 #        container_name: ${APP_NAME}-mysql
