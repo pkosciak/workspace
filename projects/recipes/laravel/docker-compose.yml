@@ -35,8 +35,6 @@ services:
 #        image: httpd:latest
 #        networks:
 #            - proxy
-#        extra_hosts:
-#            - ${APP_NAME}.test:172.17.0.1
 #        volumes:
 #            - ./src:/var/www/html
 #            - ./.docker/httpd/conf/httpd.conf:/usr/local/apache2/conf/httpd.conf
