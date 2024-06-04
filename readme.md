@@ -1,23 +1,4 @@
-## Generating certs
-
-Inside traefik/certs:
-
-```
-mkcert -install
-mkcert -cert-file certs/local-cert.pem -key-file certs/local-key.pem "docker.localhost" "*.docker.localhost"
-```
-
-On local machine:
-
-```
-choco install mkcert
-mkcert -install
-mkcert "docker.localhost" "*.docker.localhost"
-```
-
-Important: You may need to restart chrome to see your project as secure
-
-## Traefik setup
+## Step 1. Traefik setup
 
 Create network:
 
@@ -31,13 +12,8 @@ In traefik directory run command
 docker-compose up -d
 ```
 
-to see traefik dashboard, visit:
 
-```
-traefik.docker.localhost
-```
-
-## Mailhog setup
+## Step 2. Mailhog setup
 
 In mailhog directory run command
 
@@ -48,10 +24,10 @@ docker-compose up -d
 to see inbox, visit:
 
 ```
-mailhog.docker.localhost
+mailhog.test
 ```
 
-## ElasticSearch setup
+## Step 3. ElasticSearch setup
 
 In elasticsearch directory run command
 
@@ -61,11 +37,11 @@ docker-compose up -d
 
 To connect to elastic search use hostname: elasticsearch
 
-## Project setup
+## Step 4. Project setup
 
 Clone recipe from recipes directory into projects directory
 
-Change directory name
+Change directory name eg. newproject1
 
 Edit .env file to your preferences
 
@@ -76,13 +52,41 @@ In project directory (not src) run command:
 docker-compose up -d
 ```
 
-## Recreate project
+To create ssl certificate, run on local machine:
 
-In case you need to change Dockerfile inside your project run command:
+```
+choco install mkcert
+mkcert -install
+mkcert -cert-file certs/local-cert.pem -key-file certs/local-key.pem "newproject1.test" "*.newproject1.test"
+```
+
+Copy .pem files to directory traefik/certs
+
+Recreate traefik container
+
+
+## Recreate container
+
+In case you need to make changes in containers, you can run this command afterwards:
 
 ```
 docker-compose up -d --build --force-recreate
 ```
+
+## New project
+generate new .pem files including your new project name and clone them into traefik/certs - do this for each new project
+command will now look like this:
+```
+mkcert -cert-file certs/local-cert.pem -key-file certs/local-key.pem^
+ "newproject1.test" "*.newproject1.test"^
+ "newproject2.test" "*.newproject2.test"^
+```
+
+add hostname to C:\Windows\System32\drivers\etc\hosts file
+127.0.0.1 newproject1.test
+127.0.0.1 newproject2.test
+
+# Mysql data storage
 
 Mysql data is stored in .docker/mysql/data, so it won't be affected as data is not stored inside volume. Ir can be lost if your WSL instance breaks, just in case back up data once in a while.
 
@@ -93,11 +97,17 @@ Replace APP_NAME with your app name
 ```
 docker exec -it APP_NAME-php bash
 ```
+```
+composer install
+```
 
 ## WPCLI (wordpress recipe)
 
 Replace APP_NAME with your app name
 
 ```
-docker exec -it APP_NAME-cli wp help
+docker exec -it APP_NAME-cli bash
+```
+```
+wp help
 ```

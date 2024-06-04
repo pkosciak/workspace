@@ -9,7 +9,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
-      - "traefik.http.routers.mailhog.rule=Host(`mailhog.docker.localhost`)"
+      - "traefik.http.routers.mailhog.rule=Host(`mailhog.test`)"
       - "traefik.http.routers.mailhog.tls=true"
       - "traefik.http.services.mailhog.loadbalancer.server.port=8025"
     networks:

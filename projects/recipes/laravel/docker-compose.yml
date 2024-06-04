@@ -8,6 +8,8 @@ services:
             dockerfile: Dockerfile
         networks:
             - proxy
+        extra_hosts:
+            - ${APP_NAME}.test:172.17.0.1
         volumes:
             - ./src:/var/www/html
     nginx:
@@ -16,7 +18,7 @@ services:
         labels:
             - "traefik.enable=true"
             - "traefik.docker.network=proxy"
-            - "traefik.http.routers.${APP_NAME}.rule=Host(`${APP_NAME}.docker.localhost`)"
+            - "traefik.http.routers.${APP_NAME}.rule=Host(`${APP_NAME}.test`) || HostRegexp(`{subdomain:[a-z]+}.${APP_NAME}.test`)"
             - "traefik.http.routers.${APP_NAME}.tls=true"
         networks:
             - proxy
