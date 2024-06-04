@@ -41,7 +41,7 @@ To connect to elastic search use hostname: elasticsearch
 
 Clone recipe from recipes directory into projects directory
 
-Change directory name eg. newproject1
+Change directory name e.g. newproject1
 
 Edit .env file to your preferences
 
@@ -64,17 +64,21 @@ Copy .pem files to directory traefik/certs
 
 Recreate traefik container
 
+Add hostname to C:\Windows\System32\drivers\etc\hosts file
+127.0.0.1 newproject1.test
+
 
 ## Recreate container
 
-In case you need to make changes in containers, you can run this command afterwards:
+In case you need to make changes in containers, you can run this command afterward:
 
 ```
 docker-compose up -d --build --force-recreate
 ```
 
 ## New project
-generate new .pem files including your new project name and clone them into traefik/certs - do this for each new project
+Repeat step 4, including these changes:
+Generate new .pem files including your new project name and clone them into traefik/certs - do this for each new project
 command will now look like this:
 ```
 mkcert -cert-file certs/local-cert.pem -key-file certs/local-key.pem^
@@ -88,11 +92,11 @@ add hostname to C:\Windows\System32\drivers\etc\hosts file
 
 ## Mysql data storage
 
-Mysql data is stored in .docker/mysql/data, so it won't be affected as data is not stored inside volume. Ir can be lost if your WSL instance breaks, just in case back up data once in a while.
+Mysql data is stored in newporject1/.docker/mysql/data. It can be lost if your WSL instance breaks, just in case back up data once in a while.
 
 To connect to mysql container use mysql57 or mysql8 as a hostname
 
-You can also set up each project to use its own mysql instance if you need specific configuration for it, just uncomment container setup inside doccker-compose file, remember to apply unique port number
+You can also set up each project to use its own mysql instance if you need specific configuration for it, just uncomment container setup inside docker-compose file, remember to apply unique port number
 
 ## Executing commands in project (e.g. composer install)
 
