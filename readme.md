@@ -117,7 +117,8 @@ mkcert -cert-file local-cert.pem -key-file local-key.pem^
 
 ## Mysql data storage
 
-MySQL data is stored in `[project catalog]/.docker/mysql/data`. Backup your data periodically to avoid data loss.
+For the `mysql57` container, data is stored in the `mysql57/data` directory.
+For the `mysql8` container, data is stored in the `mysql8/data` directory.
 
 To connect to the MySQL container in your project, use `mysql57` or `mysql8` as the hostname. For example, in a WordPress configuration:
 
@@ -129,6 +130,10 @@ define('DB_HOST', 'mysql8'); // Use the container name for MySQL 8.0
 ```
 
 You can also set up each project with its own MySQL instance if specific configurations are needed. Ensure to use a unique port number (set up inside the `.env` file). If using a predefined MySQL configuration, your project’s MySQL instance container should be named `projectname-mysql`.
+
+For the project's MySQL instance, data is stored inside the `[project catalog]/.docker/mysql/data` directory.
+
+**Backup your data periodically to avoid data loss.**
 
 ## Executing commands in a project (e.g., composer install)
 
