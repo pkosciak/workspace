@@ -1,21 +1,16 @@
 ## Step 1. Traefik setup
 
-Create network:
+In traefik directory run commands:
 
 ```
 docker network create proxy
-```
-
-In traefik directory run command
-
-```
 docker-compose up -d
 ```
 
 
 ## Step 2. Mailhog setup
 
-In mailhog directory run command
+In mailhog directory run command:
 
 ```
 docker-compose up -d
@@ -29,7 +24,7 @@ mailhog.test
 
 ## Step 3. ElasticSearch setup
 
-In elasticsearch directory run command
+In elasticsearch directory run command:
 
 ```
 docker-compose up -d
@@ -39,20 +34,21 @@ To connect to elastic search use hostname: elasticsearch
 
 ## Step 4. Project setup
 
-Clone recipe from recipes directory into projects directory
+- Clone recipe from recipes directory into projects directory
 
-Change directory name e.g. newproject1
+- Change directory name e.g. newproject1
 
-Edit .env file to your preferences
+- Edit .env file to name your project (directory name will work best)
 
-Put your application files into src directory
+- Put your application files into src directory
 
-In project directory (not src) run command:
+- In project directory (not src) run command:
 ```
 docker-compose up -d
 ```
 
-To create ssl certificate, run on local machine:
+#### Creating ssl certificate:
+- Run on local machine:
 
 ```
 choco install mkcert
@@ -60,15 +56,16 @@ mkcert -install
 mkcert -cert-file certs/local-cert.pem -key-file certs/local-key.pem "newproject1.test" "*.newproject1.test"
 ```
 
-Copy .pem files to directory traefik/certs
+- Copy .pem files to directory traefik/certs
 
-Recreate traefik container
+- Recreate traefik container (instruction below)
 
-Add hostname to C:\Windows\System32\drivers\etc\hosts file
-127.0.0.1 newproject1.test
+- Add hostname to C:\Windows\System32\drivers\etc\hosts file
+```
+- 127.0.0.1 newproject1.test
+```
 
-
-## Recreate container
+## Recreating container
 
 In case you need to make changes in containers, you can run this command afterward:
 
@@ -76,9 +73,10 @@ In case you need to make changes in containers, you can run this command afterwa
 docker-compose up -d --build --force-recreate
 ```
 
-## New project
-Repeat step 4, including these changes:
-Generate new .pem files including your new project name and clone them into traefik/certs - do this for each new project
+## Setting up a new project
+
+- Repeat step 4, including these changes:
+- Generate new .pem files including your new project name and clone them into traefik/certs - do this for each new project
 command will now look like this:
 ```
 mkcert -cert-file certs/local-cert.pem -key-file certs/local-key.pem^
@@ -86,9 +84,11 @@ mkcert -cert-file certs/local-cert.pem -key-file certs/local-key.pem^
  "newproject2.test" "*.newproject2.test"^
 ```
 
-add hostname to C:\Windows\System32\drivers\etc\hosts file
+- Add hostname to C:\Windows\System32\drivers\etc\hosts file
+```
 127.0.0.1 newproject1.test
 127.0.0.1 newproject2.test
+```
 
 ## Mysql data storage
 
