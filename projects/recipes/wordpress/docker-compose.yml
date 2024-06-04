@@ -42,18 +42,18 @@ services:
             WORDPRESS_DB_NAME: ${APP_NAME}
         networks:
             - proxy
-    mysql:
-        image: ${MYSQL_IMAGE}
-        container_name: ${APP_NAME}-mysql
-        volumes:
-            - ./.docker/mysql/data:/var/lib/mysql
-            - ./.docker/mysql/my.cnf:/etc/mysql/my.cnf
-        networks:
-            - proxy
-        environment:
-            MYSQL_ROOT_PASSWORD: root
-        ports:
-            - ${DB_PORT}:3306
+#    mysql:
+#        image: ${MYSQL_IMAGE}
+#        container_name: ${APP_NAME}-mysql
+#        volumes:
+#            - ./.docker/mysql/data:/var/lib/mysql
+#            - ./.docker/mysql/my.cnf:/etc/mysql/my.cnf
+#        networks:
+#            - proxy
+#        environment:
+#            MYSQL_ROOT_PASSWORD: root
+#        ports:
+#            - ${DB_PORT}:3306
 
 #    redis:
 #        container_name: ${APP_NAME}-redis
