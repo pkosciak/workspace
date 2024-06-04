@@ -1,22 +1,36 @@
 ## Step 1. Traefik setup
 
-In traefik directory run commands:
+- In traefik directory run commands:
 
 ```
 docker network create proxy
 docker-compose up -d
 ```
 
+- Add hostname to C:\Windows\System32\drivers\etc\hosts file
+```
+127.0.0.1 traefik.test
+```
+
+- Visit:
+```
+traefik.test
+```
 
 ## Step 2. Mailhog setup
 
-In mailhog directory run command:
+- In mailhog directory run command:
 
 ```
 docker-compose up -d
 ```
 
-to see inbox, visit:
+- Add hostname to C:\Windows\System32\drivers\etc\hosts file
+```
+127.0.0.1 mailhog.test
+```
+
+- Visit:
 
 ```
 mailhog.test
@@ -24,13 +38,13 @@ mailhog.test
 
 ## Step 3. ElasticSearch setup
 
-In elasticsearch directory run command:
+- In elasticsearch directory run command:
 
 ```
 docker-compose up -d
 ```
 
-To connect to elastic search use hostname: elasticsearch
+- To connect to elastic search use hostname: elasticsearch
 
 ## Step 4. Project setup
 
@@ -43,11 +57,15 @@ To connect to elastic search use hostname: elasticsearch
 - Put your application files into src directory
 
 - In project directory (not src) run command:
+
 ```
 docker-compose up -d
 ```
 
 #### Creating ssl certificate:
+
+In order to create certificates you need to install [mkcert](https://github.com/FiloSottile/mkcert) on your machine, you can install it via [chocolatey](https://chocolatey.org/install).
+
 - Run on local machine:
 
 ```
@@ -79,14 +97,13 @@ docker-compose up -d --build --force-recreate
 - Generate new .pem files including your new project name and clone them into traefik/certs - do this for each new project
 command will now look like this:
 ```
-mkcert -cert-file certs/local-cert.pem -key-file certs/local-key.pem^
+mkcert -cert-file local-cert.pem -key-file local-key.pem^
  "newproject1.test" "*.newproject1.test"^
- "newproject2.test" "*.newproject2.test"^
+ "newproject2.test" "*.newproject2.test"
 ```
 
 - Add hostname to C:\Windows\System32\drivers\etc\hosts file
 ```
-127.0.0.1 newproject1.test
 127.0.0.1 newproject2.test
 ```
 
