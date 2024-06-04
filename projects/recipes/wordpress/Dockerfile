@@ -7,7 +7,7 @@ ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/do
 RUN chmod +x /usr/local/bin/install-php-extensions && sync \
     && install-php-extensions pdo_mysql \
         mysqli \
-		gd \
+		gd
 #        xdebug
 
 COPY --from=composer /usr/bin/composer /usr/bin/composer
