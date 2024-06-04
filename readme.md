@@ -1,162 +1,149 @@
+# Workspace Setup
+
+This repository provides a Docker-based workspace that includes Traefik, Nginx/Apache, SSL certificates, MailHog, Elasticsearch, MySQL, and Redis.
+
 ## Step 1. Traefik setup
 
-- In traefik directory run commands:
+1. In `traefik` directory, run:
 
-```
+```sh
 docker network create proxy
 docker-compose up -d
 ```
 
-- Add hostname to C:\Windows\System32\drivers\etc\hosts file
+2. Add the hostname to your hosts file:
+
 ```
 127.0.0.1 traefik.test
 ```
 
-- Visit:
-```
-traefik.test
-```
+3. Visit `traefik.test` in your browser.
 
 ## Step 2. MySQL setup
 
-- In mysql8 and mysql57 directory run command:
+1. In `mysql8` and `mysql57` directories, run:
 
-```
+```sh
 docker-compose up -d
 ```
 
-#### Accessing mysql via MySQL Workbench,TablePlus, HeidiSQL etc.
+2. Access MySQL via MySQL Workbench, TablePlus, HeidiSQL, etc., using the following:
 
-Use 127.0.0.1 as a hostname and port number
-
-- mysql8 uses 3306
-- mysql57 uses 3307
+- `mysql8`: Hostname `127.0.0.1`, Port `3306`
+- `mysql57`: Hostname `127.0.0.1`, Port `3307`
 
 ## Step 3. Mailhog setup
 
-- In mailhog directory run command:
+1. In `mailhog` directory, run:
 
-```
+```sh
 docker-compose up -d
 ```
 
-- Add hostname to C:\Windows\System32\drivers\etc\hosts file
+2. Add the hostname to your hosts file:
+
 ```
 127.0.0.1 mailhog.test
 ```
 
-- Visit:
-
-```
-mailhog.test
-```
+3. Visit `mailhog.test` in your browser.
 
 ## Step 4. ElasticSearch setup
 
-- In elasticsearch directory run command:
+1. In the `elasticsearch` directory, run:
 
-```
+```sh
 docker-compose up -d
 ```
 
-- To connect to elastic search use hostname: elasticsearch
+2. To connect to Elasticsearch, use the hostname `elasticsearch`.
 
 ## Step 5. Project setup
 
-- Clone recipe from recipes directory into projects directory
+1. Clone a recipe from the `recipes` directory into the `projects` directory.
+2. Rename the directory, e.g., `newproject1`.
+3. Edit the `.env` file to name your project.
+4. Place your application files into the `src` directory.
+5. In the project directory (not `src`), run:
 
-- Change directory name e.g. newproject1
-
-- Edit .env file to name your project (directory name will work best)
-
-- Put your application files into src directory
-
-- In project directory (not src) run command:
-
-```
+```sh
 docker-compose up -d
 ```
 
-#### Creating ssl certificate:
+#### Creating SSL certificates:
 
-In order to create certificates you need to install [mkcert](https://github.com/FiloSottile/mkcert) on your machine, you can install it via [chocolatey](https://chocolatey.org/install).
+To create SSL certificates, you need to install [mkcert](https://github.com/FiloSottile/mkcert) on your machine. You can install it via [chocolatey](https://chocolatey.org/install).
 
-- Run on local machine:
-
+1. Run:
 ```
 choco install mkcert
 mkcert -install
 mkcert -cert-file certs/local-cert.pem -key-file certs/local-key.pem "newproject1.test" "*.newproject1.test"
 ```
 
-- Copy .pem files to directory traefik/certs
+2. Copy the .pem files to the `traefik/certs` directory.
+3. Recreate the Traefik container (instructions below).
+4. Add the hostname to your hosts file
 
-- Recreate traefik container (instruction below)
-
-- Add hostname to C:\Windows\System32\drivers\etc\hosts file
 ```
 - 127.0.0.1 newproject1.test
 ```
 
-## Recreating container
+## Recreating containers
 
-In case you need to make changes in containers, you can run this command afterward:
+After making changes to containers, run:
 
-```
+```sh
 docker-compose up -d --build --force-recreate
 ```
 
 ## Setting up a new project
 
-- Repeat step 5, including these changes:
-- Generate new .pem files including your new project name and clone them into traefik/certs,
-command will now look like this:
-```
+1. Repeat Step 5, including these changes:
+2. Generate new .pem files for your new project and place them in `traefik/certs`:
+
+```sh
 mkcert -cert-file local-cert.pem -key-file local-key.pem^
  "newproject1.test" "*.newproject1.test"^
  "newproject2.test" "*.newproject2.test"
 ```
-- Recreate traefik container
-- Add hostname to C:\Windows\System32\drivers\etc\hosts file
+
+3. Recreate the Traefik container
+4. Add the hostname to your hosts file:
+
 ```
 127.0.0.1 newproject2.test
 ```
 
 ## Mysql data storage
 
-Mysql data is stored in [project catalog]/.docker/mysql/data. It can be lost if your WSL instance breaks, just in case back up data once in a while.
+MySQL data is stored in `[project catalog]/.docker/mysql/data`. Backup your data periodically to avoid data loss.
 
-To connect to mysql container in your project use mysql57 or mysql8 as a hostname
+To connect to the MySQL container in your project, use `mysql57` or `mysql8` as the hostname. For example, in a WordPress configuration:
 
-e.g. wordpress configuration:
-```
+```php
 define('DB_NAME', 'newproject1');
 define('DB_USER', 'root');
 define('DB_PASSWORD', 'root');
-define('DB_HOST', 'mysql8'); // mysql8 is container name for mysql 8.0
+define('DB_HOST', 'mysql8'); // Use the container name for MySQL 8.0
 ```
 
-You can also set up each project to use its own mysql instance if you need specific configuration for it, just uncomment container setup inside docker-compose file, remember to apply unique port number (you can set it up inside .env file).
-If you uncomment predefined configuration for mysql, your project mysql instance container name should be named projectname-mysql. Use this name instead mysql8 to connect.
+You can also set up each project with its own MySQL instance if specific configurations are needed. Ensure to use a unique port number (set up inside the `.env` file). If using a predefined MySQL configuration, your project’s MySQL instance container should be named `projectname-mysql`.
 
-## Executing commands in project (e.g. composer install)
+## Executing commands in a project (e.g., composer install)
 
-Replace APP_NAME with your app name
+Replace `APP_NAME` with your app name:
 
-```
+```sh
 docker exec -it APP_NAME-php bash
-```
-```
 composer install
 ```
 
-## WPCLI (wordpress recipe)
+## WPCLI (WordPress recipe)
 
-Replace APP_NAME with your app name
+Replace `APP_NAME` with your app name:
 
-```
+```sh
 docker exec -it APP_NAME-cli bash
-```
-```
 wp help
 ```
