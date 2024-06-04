@@ -86,9 +86,13 @@ add hostname to C:\Windows\System32\drivers\etc\hosts file
 127.0.0.1 newproject1.test
 127.0.0.1 newproject2.test
 
-# Mysql data storage
+## Mysql data storage
 
 Mysql data is stored in .docker/mysql/data, so it won't be affected as data is not stored inside volume. Ir can be lost if your WSL instance breaks, just in case back up data once in a while.
+
+To connect to mysql container use mysql57 or mysql8 as a hostname
+
+You can also set up each project to use its own mysql instance if you need specific configuration for it, just uncomment container setup inside doccker-compose file, remember to apply unique port number
 
 ## Executing commands in project (e.g. composer install)
 
