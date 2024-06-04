@@ -29,7 +29,7 @@ services:
         environment:
             APP_NAME: ${APP_NAME}
 #    mysql:
-#        image: ${MYSQL_IMAGE}
+#        image: mysql:8
 #        container_name: ${APP_NAME}-mysql
 #        volumes:
 #            - ./.docker/mysql/data:/var/lib/mysql
