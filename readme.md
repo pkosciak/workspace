@@ -69,25 +69,24 @@ docker-compose up -d
 ```sh
 docker-compose up -d
 ```
-
-#### Creating SSL certificates:
-
-To create SSL certificates, you need to install [mkcert](https://github.com/FiloSottile/mkcert) on your machine. You can install it via [chocolatey](https://chocolatey.org/install).
-
-1. Run:
-```
-choco install mkcert
-mkcert -install
-mkcert -cert-file certs/local-cert.pem -key-file certs/local-key.pem "newproject1.test" "*.newproject1.test"
-```
-
-2. Copy the .pem files to the `traefik/certs` directory.
-3. Recreate the Traefik container (instructions below).
-4. Add the hostname to your hosts file
+6. Add the hostname to your hosts file:
 
 ```
-- 127.0.0.1 newproject1.test
+127.0.0.1 newproject1.test
 ```
+
+## Step 6. Setup SSL certificates:
+
+This is one time step. MiniCA will create certificates automatically for each new project.
+
+1. Copy `traefik/certificates/minica.pem` to your local machine
+2. Run command
+```sh
+openssl x509 -outform der -in minica.pem -out minica.crt
+```
+3. Right click `minica.crt`
+4. Install certificate -> Place certificate in the following store -> Trusted Root Certification Authorities
+5. Restart browser
 
 ## Recreating containers
 
@@ -95,24 +94,6 @@ After making changes to containers, run:
 
 ```sh
 docker-compose up -d --build --force-recreate
-```
-
-## Setting up a new project
-
-1. Repeat Step 5, including these changes:
-2. Generate new .pem files for your new project and place them in `traefik/certs`:
-
-```sh
-mkcert -cert-file local-cert.pem -key-file local-key.pem^
- "newproject1.test" "*.newproject1.test"^
- "newproject2.test" "*.newproject2.test"
-```
-
-3. Recreate the Traefik container
-4. Add the hostname to your hosts file:
-
-```
-127.0.0.1 newproject2.test
 ```
 
 ## Mysql data storage

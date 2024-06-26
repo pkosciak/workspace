@@ -1,6 +1,22 @@
 version: '3'
 
 services:
+  minica:
+    image: ghcr.io/bjornsnoen/minica-traefik-api:latest
+    volumes:
+      - ./certificates:/app/certificates
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      DOCKER_HOST: "unix:///var/run/docker.sock"
+      DOCKER_LISTEN: "yes"
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.minica.rule=Host(`minica.test`)"
+      - "traefik.http.routers.minica.middlewares=redirectssl@docker"
+      - "traefik.http.routers.minicasecure.rule=Host(`minica.test`)"
+      - "traefik.http.routers.minicasecure.tls=true"
+
   traefik:
     image: traefik:v2.5
     security_opt:
@@ -8,11 +24,28 @@ services:
     ports:
       - 80:80
       - 443:443
+    command:
+      - "--log.level=DEBUG"
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+      - "--entrypoints.web.http.redirections.entrypoint.permanent=true"
+      - "--providers.file.directory=/app/certificates"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./config/static.yml:/etc/traefik/traefik.yml:ro
-      - ./config/dynamic.yml:/etc/traefik/dynamic.yml:ro
-      - ./certs:/etc/certs:ro
+      - ./certificates:/app/certificates
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.middlewares.redirectssl.redirectscheme.scheme=https"
+      - "traefik.http.routers.traefik.rule=Host(`traefik.test`)"
+      - "traefik.http.routers.traefik.middlewares=redirectssl@docker"
+      - "traefik.http.routers.traefiksecure.rule=Host(`traefik.test`)"
+      - "traefik.http.routers.traefiksecure.tls=true"
+      - "traefik.http.services.traefik.loadbalancer.server.port=8080"
     networks:
       - proxy
 
