@@ -133,3 +133,30 @@ Replace `APP_NAME` with your app name:
 docker exec -it APP_NAME-cli bash
 wp help
 ```
+
+## Setting up Xdebug in PHPStorm
+
+Follow these steps for each of your projects:
+
+1. File -> Settings -> PHP -> Debug
+
+- Xdebug port: 9003
+- Tick 'Can accept external connections'
+
+2. File -> Settings -> PHP -> Servers
+
+- Name: localhost
+- Hostname localhost
+- Tick 'Use path mapping'
+- Set '/var/www/html' next to your projects `src` directory
+- Add breakpoints in your code
+
+3. Run -> Start listening for PHP Debug Connections
+
+In chrome:
+- Install the Xdebug helper extension
+- Go to your project's URL
+- Enable the extension
+- Reload the page
+
+Note: If you switch projects, remember to turn off listening for connections in the project you are no longer working on. Otherwise, the debugger might open in the wrong window.
