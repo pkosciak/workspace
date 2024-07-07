@@ -12,6 +12,7 @@ services:
             - ${APP_NAME}.test:172.17.0.1
         volumes:
             - ./src:/var/www/html
+            - ./.docker/php/logs:/var/log/php-fpm
 
     nginx:
         container_name: ${APP_NAME}-nginx
@@ -49,11 +50,12 @@ services:
 #            APP_NAME: ${APP_NAME}
 
 #    mysql:
-#        image: mysql:8
 #        container_name: ${APP_NAME}-mysql
+#        image: mysql:8
 #        volumes:
 #            - ./.docker/mysql/data:/var/lib/mysql
 #            - ./.docker/mysql/my.cnf:/etc/mysql/my.cnf
+#            - ./.docker/mysql/logs/slow-query.log:/var/log/mysql/slow-query.log
 #        networks:
 #            - proxy
 #        environment:

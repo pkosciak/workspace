@@ -21,6 +21,7 @@ RUN apk add --update linux-headers
 RUN apk --no-cache add shadow && usermod -u 1000 www-data
 
 COPY .docker/php/php.ini "${PHP_INI_DIR}"
+COPY .docker/php/www.conf "/usr/local/etc/php-fpm.d/www.conf"
 COPY .docker/xdebug/xdebug.ini "${PHP_INI_DIR}/conf.d"
 
 RUN chown -R www-data:www-data /var/www/html

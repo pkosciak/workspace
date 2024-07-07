@@ -6,6 +6,8 @@ services:
     container_name: mysql8
     volumes:
       - ./data:/var/lib/mysql
+      - ./my.cnf:/etc/mysql/my.cnf
+      - ./logs/slow-query.log:/var/log/mysql/slow-query.log
     networks:
       - proxy
       - default
