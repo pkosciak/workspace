@@ -25,6 +25,6 @@ COPY .docker/php/www.conf "/usr/local/etc/php-fpm.d/www.conf"
 COPY .docker/xdebug/xdebug.ini "${PHP_INI_DIR}/conf.d"
 
 RUN chown -R www-data:www-data /var/www/html
-RUN chown -R 774 /var/www/html
+RUN chmod -R 775 /var/www/html
 
 USER www-data
