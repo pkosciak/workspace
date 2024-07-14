@@ -58,6 +58,7 @@ services:
 #        image: mysql:8
 #        volumes:
 #            - ./.docker/mysql/data:/var/lib/mysql
+#            - ./.docker/mysql/dumps:/home/dumps
 #            - ./.docker/mysql/my.cnf:/etc/mysql/my.cnf
 #            - ./.docker/mysql/logs/slow-query.log:/var/log/mysql/slow-query.log
 #        networks:

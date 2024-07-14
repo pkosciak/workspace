@@ -6,6 +6,7 @@ services:
     container_name: mysql57
     volumes:
       - ./data:/var/lib/mysql
+      - ./dumps:/home/dumps
       - ./my.cnf:/etc/mysql/my.cnf
       - ./logs/slow-query.log:/var/log/mysql/slow-query.log
     networks:
