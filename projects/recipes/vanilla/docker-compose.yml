@@ -9,7 +9,7 @@ services:
         networks:
             - proxy
         extra_hosts:
-            - ${APP_NAME}.test:172.17.0.1
+            - ${APP_NAME}.localhost:172.17.0.1
         volumes:
             - ./src:/var/www/html
             - ./.docker/php/logs:/var/log/php-fpm
