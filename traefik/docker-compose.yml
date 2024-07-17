@@ -12,7 +12,7 @@ services:
     restart: always
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.minica.rule=Host(`minica.test`)"
+      - "traefik.http.routers.minica.rule=Host(`minica.localhost`)"
       - "traefik.http.routers.minica.tls=true"
 
   traefik:
@@ -39,7 +39,7 @@ services:
     restart: always
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.traefiksecure.rule=Host(`traefik.test`)"
+      - "traefik.http.routers.traefiksecure.rule=Host(`traefik.localhost`)"
       - "traefik.http.routers.traefiksecure.tls=true"
       - "traefik.http.services.traefik.loadbalancer.server.port=8080"
     networks:

@@ -11,13 +11,7 @@ docker network create proxy
 docker-compose up -d
 ```
 
-2. Add the hostname to your hosts file:
-
-```
-127.0.0.1 traefik.test
-```
-
-3. Visit `traefik.test` in your browser.
+2. Visit `traefik.localhost` in your browser.
 
 ## Step 2. MySQL setup
 
@@ -40,13 +34,7 @@ docker-compose up -d
 docker-compose up -d
 ```
 
-2. Add the hostname to your hosts file:
-
-```
-127.0.0.1 mailhog.test
-```
-
-3. Visit `mailhog.test` in your browser.
+2. Visit `mailhog.localhost` in your browser.
 
 ## Step 4. ElasticSearch setup
 
@@ -62,17 +50,12 @@ docker-compose up -d
 
 1. Clone a recipe from the `recipes` directory into the `projects` directory.
 2. Rename the directory, e.g., `newproject1`.
-3. Edit the `.env` file to name your project.
+3. Edit the `.env` file to name your project, preferably using the same name as the directory.
 4. Place your application files into the `src` directory.
-5. In the project directory (not `src`), run:
+5. In the project directory, run:
 
 ```sh
 docker-compose up -d
-```
-6. Add the hostname to your hosts file:
-
-```
-127.0.0.1 newproject1.test
 ```
 
 ## Step 6. Setup SSL certificates:

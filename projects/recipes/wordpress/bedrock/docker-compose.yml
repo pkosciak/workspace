@@ -24,8 +24,8 @@ services:
         labels:
             - "traefik.enable=true"
             - "traefik.docker.network=proxy"
-            - "traefik.http.routers.${APP_NAME}.rule=Host(`${APP_NAME}.test`)"
-#            - "traefik.http.routers.${APP_NAME}.rule=Host(`${APP_NAME}.test`) || Host(`subdomain1.${APP_NAME}.test`) || Host(`subdomain2.${APP_NAME}.test`)"
+            - "traefik.http.routers.${APP_NAME}.rule=Host(`${APP_NAME}.localhost`)"
+#            - "traefik.http.routers.${APP_NAME}.rule=Host(`${APP_NAME}.localhost`) || Host(`subdomain1.${APP_NAME}.localhost`) || Host(`subdomain2.${APP_NAME}.localhost`)"
             - "traefik.http.routers.${APP_NAME}.tls=true"
         networks:
             - proxy
@@ -49,8 +49,8 @@ services:
 #        labels:
 #            - "traefik.enable=true"
 #            - "traefik.docker.network=proxy"
-#            - "traefik.http.routers.${APP_NAME}.rule=Host(`${APP_NAME}.test`)"
-##            - "traefik.http.routers.${APP_NAME}.rule=Host(`${APP_NAME}.test`) || Host(`subdomain1.${APP_NAME}.test`) || Host(`subdomain2.${APP_NAME}.test`)"
+#            - "traefik.http.routers.${APP_NAME}.rule=Host(`${APP_NAME}.localhost`)"
+##            - "traefik.http.routers.${APP_NAME}.rule=Host(`${APP_NAME}.localhost`) || Host(`subdomain1.${APP_NAME}.localhost`) || Host(`subdomain2.${APP_NAME}.localhost`)"
 #            - "traefik.http.routers.${APP_NAME}.tls=true"
 #        environment:
 #            APP_NAME: ${APP_NAME}
