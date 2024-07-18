@@ -1,7 +1,6 @@
-version: '3'
-
 services:
   minica:
+    container_name: minica
     image: ghcr.io/bjornsnoen/minica-traefik-api:latest
     volumes:
       - ./certificates:/app/certificates
@@ -16,6 +15,7 @@ services:
       - "traefik.http.routers.minica.tls=true"
 
   traefik:
+    container_name: traefik
     image: traefik:v2.5
     security_opt:
       - no-new-privileges:true
