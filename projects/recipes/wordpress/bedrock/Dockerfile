@@ -10,8 +10,15 @@ RUN chmod +x /usr/local/bin/install-php-extensions && sync \
 		gd \
         xdebug
 
+# composer
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
+# wp-cli
+RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+RUN chmod +x wp-cli.phar
+RUN mv wp-cli.phar /usr/local/bin/wp
+
+#mailhog
 RUN wget https://github.com/mailhog/mhsendmail/releases/download/v0.2.0/mhsendmail_linux_amd64
 RUN chmod +x mhsendmail_linux_amd64
 RUN mv mhsendmail_linux_amd64 /usr/local/bin/mhsendmail

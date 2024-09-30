@@ -113,7 +113,7 @@ composer install
 Replace `APP_NAME` with your app name:
 
 ```sh
-docker exec -it APP_NAME-cli bash
+docker exec -it APP_NAME-php bash
 wp help
 ```
 

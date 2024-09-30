@@ -53,21 +53,6 @@ services:
 #        environment:
 #            APP_NAME: ${APP_NAME}
 
-#    wpcli:
-#        container_name: ${APP_NAME}-cli
-#        image: wordpress:cli-2.8.1-php8.1
-#        user: 1000:1000
-#        command: tail -f /dev/null
-#        volumes:
-#            - ./src:/var/www/html
-#        environment:
-#            WORDPRESS_DB_HOST: mysql8
-#            WORDPRESS_DB_USER: root
-#            WORDPRESS_DB_PASSWORD: root
-#            WORDPRESS_DB_NAME: ${APP_NAME}
-#        networks:
-#            - proxy
-
 #    mysql:
 #        container_name: ${APP_NAME}-mysql
 #        image: mysql:8
