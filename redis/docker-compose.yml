@@ -1,0 +1,10 @@
+services:
+  redis:
+    container_name: redis
+    image: redis:7.4.0-alpine
+    networks:
+      - proxy
+
+networks:
+  proxy:
+    external: true

@@ -36,15 +36,15 @@ docker-compose up -d
 
 2. Visit `mailhog.localhost` in your browser.
 
-## Step 4. ElasticSearch setup
+## Step 4. ElasticSearch/Redis/Memcached setup
 
-1. In the `elasticsearch` directory, run:
+1. In the `elasticsearch`,`redis`,`memcached` directory, run:
 
 ```sh
 docker-compose up -d
 ```
 
-2. To connect to Elasticsearch, use the hostname `elasticsearch`.
+2. To connect to service, use container name as a hostname.
 
 ## Step 5. Project setup
 

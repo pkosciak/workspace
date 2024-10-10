@@ -68,12 +68,6 @@ services:
 #        ports:
 #            - ${DB_PORT}:3306
 
-#    redis:
-#        container_name: ${APP_NAME}-redis
-#        image: redis
-#        networks:
-#            - proxy
-
 networks:
     proxy:
         external: true
