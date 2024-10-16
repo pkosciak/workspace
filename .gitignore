@@ -1,1 +1,6 @@
 .idea
+.DS_Store
+traefik/certificates
+mysql/mysql8/data
+mysql/mysql8/logs
+projects
