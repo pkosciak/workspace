@@ -12,7 +12,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
-      - "traefik.http.routers.elasticsearch.rule=Host(`elasticsearch.localhost`)"
+      - "traefik.http.routers.elasticsearch.rule=Host(`elasticsearch.test`)"
       - "traefik.http.routers.elasticsearch.tls=true"
     networks:
       - proxy

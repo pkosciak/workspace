@@ -11,7 +11,7 @@ docker network create proxy
 docker-compose up -d
 ```
 
-2. Visit `traefik.localhost` in your browser.
+2. Visit `traefik.test` in your browser.
 
 ## Step 2. MySQL setup
 
@@ -34,7 +34,7 @@ docker-compose up -d
 docker-compose up -d
 ```
 
-2. Visit `mailhog.localhost` in your browser.
+2. Visit `mailhog.test` in your browser.
 
 ## Step 4. ElasticSearch/Redis/Memcached setup
 
@@ -58,6 +58,22 @@ docker-compose up -d
 docker-compose up -d
 ```
 
+6. Copy `cert.pem` from `traefik/certificates/newproject1` to `projects/newproject1/.docker/php/certs`
+7. Uncomment from `projects/newproject1/Dockerfile`
+
+```
+COPY ./.docker/php/certs/cert.pem /usr/local/share/ca-certificates/minica-ca.crt
+RUN apk add --no-cache ca-certificates \
+ && cp /usr/local/share/ca-certificates/minica-ca.crt /etc/ssl/certs/ \
+ && update-ca-certificates
+```
+
+8. Run
+
+```sh
+docker-compose up -d --build --force-recreate
+```
+
 ## Step 6. Setup SSL certificates:
 
 This is one time step. MiniCA will create certificates automatically for each new project.
@@ -70,14 +86,6 @@ openssl x509 -outform der -in minica.pem -out minica.crt
 3. Right click `minica.crt`
 4. Install certificate -> Place certificate in the following store -> Trusted Root Certification Authorities
 5. Restart browser
-
-## Recreating containers
-
-After making changes to containers, run:
-
-```sh
-docker-compose up -d --build --force-recreate
-```
 
 ## Mysql data storage
 
@@ -108,14 +116,17 @@ docker exec -it APP_NAME-php bash
 composer install
 ```
 
-## WPCLI (WordPress recipe)
+## Recipes
 
-Replace `APP_NAME` with your app name:
+These are out-of-the-box configurations for your projects. All of them come with Composer installed. The WordPress recipe is a bit more advanced, as I primarily work with WordPress on a daily basis.
 
-```sh
-docker exec -it APP_NAME-php bash
-wp help
-```
+## WordPress recipe
+
+Additionally includes:
+- WP-CLI
+- Wordfence-CLI
+  - ou can run a vulnerability scan with the following command:
+  - `wordfence vuln-scan .`
 
 ## Setting up Xdebug in PHPStorm
 
