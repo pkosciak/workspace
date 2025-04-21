@@ -5,7 +5,7 @@ This repository provides a Docker-based workspace that includes Traefik, Nginx/A
 ## Requirements
 
 To ensure everything works flawlessly, follow these steps:
-- For Windows users: Replace all occurrences of `.test` with `.localhost` in the instructions.
+- For Windows users: Replace all occurrences of `.test` with `.localhost` in the instructions and files.
 - For macOS users: Keep `.test` but also [create persistent loopback interface](https://github.com/pkosciak/local-dev?tab=readme-ov-file#1-create-persistent-loopback-interface-in-macos) and [install and configure dnsmasq](https://github.com/pkosciak/local-dev?tab=readme-ov-file#2-install-and-configure-dnsmasq)
 
 ## Step 1. Traefik setup
