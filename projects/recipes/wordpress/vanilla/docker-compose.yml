@@ -39,8 +39,11 @@ services:
             - proxy
         volumes:
             - ./src:/var/www/html
-            - ./.docker/nginx/logs:/var/log/nginx
-            - ./.docker/nginx/default.conf.template:/etc/nginx/templates/default.conf.template
+            - ./.docker/php/ini/php.ini:/usr/local/etc/php/php.ini
+            - ./.docker/xdebug/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
+            - ./.docker/php/logs:/var/log
+            - ./.docker/php/pool.d:/usr/local/etc/php-fpm.d
+            - ./.docker/php/php-fpm.conf:/usr/local/etc/php-fpm.conf
         environment:
             APP_NAME: ${APP_NAME}
 

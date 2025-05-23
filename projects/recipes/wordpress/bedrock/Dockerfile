@@ -60,6 +60,12 @@ RUN apk add --update linux-headers
 
 RUN apk --no-cache add shadow && usermod -u 1000 www-data
 
+# Create log directory with proper permissions
+RUN mkdir -p /var/log \
+    && touch /var/log/php-fpm.error.log \
+    && chown -R www-data:www-data /var/log \
+    && chmod -R 755 /var/log
+
 RUN chown -R www-data:www-data /var/www/html
 RUN chown -R 774 /var/www/html
 
