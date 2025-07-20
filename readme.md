@@ -29,8 +29,8 @@ docker-compose up -d
 
 2. Access MySQL via MySQL Workbench, TablePlus, HeidiSQL, etc., using the following:
 
-- `mysql8`: Hostname `127.0.0.1`, Port `3306`
-- `mysql57`: Hostname `127.0.0.1`, Port `3307`
+- `mysql8`: Hostname `127.0.0.1`, Port `3306`, Username: `root`, Password: `root`
+- `mysql57`: Hostname `127.0.0.1`, Port `3307`, Username: `root`, Password: `root`
 
 ## Step 3. Mailhog setup
 
@@ -47,8 +47,9 @@ docker-compose up -d
 1. Clone a template from the `template` directory into the `projects` directory.
 2. Rename the directory, e.g., `newproject1`.
 3. Edit the `.env` file to name your project, preferably using the same name as the directory.
-4. Place your application files into the `src` directory.
-5. In the project directory, run:
+4. Optionally: setup project specific mysql container (commented out in docker-compose file) or switch nginx with apache
+5. Place your application files into the `src` directory.
+6. In the project directory, run:
 
 ```sh
 docker-compose up -d
@@ -91,7 +92,7 @@ define('DB_PASSWORD', 'root');
 define('DB_HOST', 'mysql8'); // Use the container name for MySQL 8.0
 ```
 
-You can also set up each project with its own MySQL instance if specific configurations are needed. Ensure to use a unique port number (set up inside the `.env` file). If using a predefined MySQL configuration, your project’s MySQL instance container should be named `projectname-mysql`.
+You can also set up each project with its own MySQL instance if specific configurations are needed. Ensure to use a unique port number (set up inside the `.env` file). If using a predefined MySQL configuration, your project’s MySQL instance container should be named `APP_NAME-mysql` - where APP_NAME is taken from the `.env` file.
 
 For the project's MySQL instance, data is stored inside the `[project catalog]/.docker/mysql/data` directory.
 
