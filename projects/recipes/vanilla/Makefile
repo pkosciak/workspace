@@ -26,3 +26,64 @@ wpvivid:
 	@echo "Installing and activating wpvivid-backuprestore plugin in container '$(CONTAINER)'..."
 	@docker exec $(CONTAINER) wp plugin install wpvivid-backuprestore --activate --skip-themes --skip-plugins
 	@echo "Plugin 'wpvivid-backuprestore' installed and activated." 
+
+# Usage:
+#   make core           # downloads all WordPress files
+#   make core SKIP_CONTENT=yes  # skips wp-content during download
+
+core:
+	@echo "Downloading WordPress core in container '$(CONTAINER)'..."
+	@if [ "$(SKIP_CONTENT)" = "yes" ]; then \
+		docker exec $(CONTAINER) wp core download --skip-content --force; \
+	else \
+		docker exec $(CONTAINER) wp core download --force; \
+	fi
+	@echo "Generating wp-config.php in container '$(CONTAINER)'..."
+	@docker exec $(CONTAINER) wp config create \
+		--dbname="$(APP_NAME)" \
+		--dbuser="root" \
+		--dbpass="root" \
+		--dbhost="mysql8"
+	@echo "Installing WordPress core in container '$(CONTAINER)'..."
+	@docker exec $(CONTAINER) wp core install \
+		--url="https://$(APP_NAME).test" \
+		--title="Example Site" \
+		--admin_user="admin" \
+		--admin_password="admin" \
+		--admin_email="admin@example.com" \
+		--skip-themes --skip-plugins
+	@echo "WordPress core downloaded, configured, and installed. Adjust parameters as needed." 
+
+# Add dev config include to wp-config.php and create wp-config.dev.php
+config:
+	@echo "Generating wp-config.dev.php..."
+	@echo "<?php" > wp-config.dev.php
+	@echo "define('WP_DEBUG', true);" >> wp-config.dev.php
+	@echo "define('WP_DEBUG_LOG', true);" >> wp-config.dev.php
+	@echo "define('WP_DEBUG_DISPLAY', false);" >> wp-config.dev.php
+	@echo "define('SCRIPT_DEBUG', true);" >> wp-config.dev.php
+	@echo "define('WP_DISABLE_FATAL_ERROR_HANDLER', true);" >> wp-config.dev.php
+	@echo "" >> wp-config.dev.php
+	@echo "@ini_set('display_errors', 0);" >> wp-config.dev.php
+	@echo "//@ini_set('memory_limit', -1);" >> wp-config.dev.php
+	@echo "" >> wp-config.dev.php
+	@echo "/**" >> wp-config.dev.php
+	@echo " * Disable sending emails" >> wp-config.dev.php
+	@echo " * enable only if you are using \"WP Mail SMTP\" plugin" >> wp-config.dev.php
+	@echo " */" >> wp-config.dev.php
+	@echo "//define('WPMS_ON', true);" >> wp-config.dev.php
+	@echo "//define('WPMS_DO_NOT_SEND', true);" >> wp-config.dev.php
+
+	@echo "Copying wp-config.dev.php into container '$(CONTAINER)'..."
+	@docker cp wp-config.dev.php $(CONTAINER):/var/www/html/wp-config.dev.php
+
+	@echo "Patching wp-config.php in container '$(CONTAINER)' (inserting after <?php)..."
+	@docker exec $(CONTAINER) bash -c "\
+		if ! grep -q '/wp-config.dev.php' wp-config.php; then \
+			awk 'NR==1{print; print \"if(file_exists(__DIR__ . \x27/wp-config.dev.php\x27)){\\ninclude_once __DIR__ . \x27/wp-config.dev.php\x27;\\n}\\n\"} NR>1' wp-config.php > wp-config.php.tmp && mv wp-config.php.tmp wp-config.php; \
+		fi"
+
+	@echo "Cleaning up..."
+	@rm -f wp-config.dev.php
+
+	@echo "wp-config.php updated and wp-config.dev.php created (if not present)."
