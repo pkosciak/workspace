@@ -65,16 +65,8 @@ docker-compose up -d
 ```
 
 6. Copy `cert.pem` from `traefik/certificates/newproject1` to `projects/newproject1/.docker/php/certs`
-7. Uncomment from `projects/newproject1/Dockerfile`
 
-```
-COPY ./.docker/php/certs/cert.pem /usr/local/share/ca-certificates/minica-ca.crt
-RUN apk add --no-cache ca-certificates \
- && cp /usr/local/share/ca-certificates/minica-ca.crt /etc/ssl/certs/ \
- && update-ca-certificates
-```
-
-8. Run
+7. Run
 
 ```sh
 docker-compose up -d --build --force-recreate
@@ -129,15 +121,12 @@ composer install
 
 ## Recipes
 
-These are out-of-the-box configurations for your projects. All of them come with Composer installed. The WordPress recipe is a bit more advanced, as I primarily work with WordPress on a daily basis.
-
-## WordPress recipe
-
-Additionally includes:
+Includes:
 - WP-CLI
 - Wordfence-CLI
   - ou can run a vulnerability scan with the following command:
   - `wordfence vuln-scan .`
+- Makefile for quick setting up admin account and installing backup plugin
 
 ## Setting up Xdebug in PHPStorm
 

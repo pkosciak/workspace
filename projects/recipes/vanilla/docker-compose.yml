@@ -63,14 +63,14 @@ services:
 #
 #            # HTTP
 #            - "traefik.http.routers.${APP_NAME}-http.rule=Host(`${APP_NAME}.test`)"
-##            - "traefik.http.routers.${APP_NAME}-http.rule=Host(`${APP_NAME}.test`) || Host(`subdomain1.${APP_NAME}.test`) || Host(`subdomain2.${APP_NAME}.test`)"
+#            #            - "traefik.http.routers.${APP_NAME}-http.rule=Host(`${APP_NAME}.test`) || Host(`subdomain1.${APP_NAME}.test`) || Host(`subdomain2.${APP_NAME}.test`)"
 #            - "traefik.http.routers.${APP_NAME}-http.entrypoints=web"
 #            - "traefik.http.routers.${APP_NAME}-http.middlewares=redirect-to-https"
 #            - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
 #
 #            # HTTPS
 #            - "traefik.http.routers.${APP_NAME}.rule=Host(`${APP_NAME}.test`)"
-##            - "traefik.http.routers.${APP_NAME}.rule=Host(`${APP_NAME}.test`) || Host(`subdomain1.${APP_NAME}.test`) || Host(`subdomain2.${APP_NAME}.test`)"
+#            #            - "traefik.http.routers.${APP_NAME}.rule=Host(`${APP_NAME}.test`) || Host(`subdomain1.${APP_NAME}.test`) || Host(`subdomain2.${APP_NAME}.test`)"
 #            - "traefik.http.routers.${APP_NAME}.entrypoints=websecure"
 #            - "traefik.http.routers.${APP_NAME}.tls=true"
 #        environment:
@@ -92,5 +92,5 @@ services:
 #            - ${DB_PORT}:3306
 
 networks:
-  proxy:
-    external: true
+    proxy:
+        external: true

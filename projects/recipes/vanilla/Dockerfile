@@ -11,6 +11,23 @@ RUN apk add --no-cache \
     musl-dev \
     libffi-dev
 
+# Create and activate a Python virtual environment
+RUN python3 -m venv /opt/venv && \
+    source /opt/venv/bin/activate && \
+    pip install --upgrade pip && \
+    pip install wordfence
+
+# Add the virtual environment's bin directory to PATH
+ENV PATH="/opt/venv/bin:$PATH"
+
+# Preconfigure Wordfence and persist its configuration
+RUN mkdir -p /etc/wordfence && \
+    wordfence configure --default --workers 4 --accept-terms && \
+    cp /root/.config/wordfence/wordfence-cli.ini /etc/wordfence/wordfence-cli.ini
+
+# Ensure Wordfence uses the preconfigured file
+ENV WORDFENCE_CONFIG_PATH=/etc/wordfence/cli-config.json
+
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 
 RUN chmod +x /usr/local/bin/install-php-extensions && sync \
@@ -25,10 +42,20 @@ RUN chmod +x /usr/local/bin/install-php-extensions && sync \
 
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
-#COPY ./.docker/php/certs/cert.pem /usr/local/share/ca-certificates/minica-ca.crt
-#RUN apk add --no-cache ca-certificates \
-# && cp /usr/local/share/ca-certificates/minica-ca.crt /etc/ssl/certs/ \
-# && update-ca-certificates
+# certificate
+RUN if [ -f ./.docker/php/certs/cert.pem ]; then \
+    cp ./.docker/php/certs/cert.pem /usr/local/share/ca-certificates/minica-ca.crt && \
+    apk add --no-cache ca-certificates && \
+    cp /usr/local/share/ca-certificates/minica-ca.crt /etc/ssl/certs/ && \
+    update-ca-certificates; \
+  else \
+    echo "No custom cert found, skipping cert install"; \
+  fi
+
+# wp-cli
+RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+RUN chmod +x wp-cli.phar
+RUN mv wp-cli.phar /usr/local/bin/wp
 
 RUN wget https://github.com/mailhog/mhsendmail/releases/download/v0.2.0/mhsendmail_linux_amd64
 RUN chmod +x mhsendmail_linux_amd64
