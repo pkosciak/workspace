@@ -27,6 +27,12 @@ wpvivid:
 	@docker exec $(CONTAINER) wp plugin install wpvivid-backuprestore --activate --skip-themes --skip-plugins
 	@echo "Plugin 'wpvivid-backuprestore' installed and activated." 
 
+# Install and activate wpvivid-backuprestore plugin
+bsr:
+	@echo "Installing and activating better-search-replace plugin in container '$(CONTAINER)'..."
+	@docker exec $(CONTAINER) wp plugin install better-search-replace --activate --skip-themes --skip-plugins
+	@echo "Plugin 'better-search-replace' installed and activated." 
+
 # Usage:
 #   make core           # downloads all WordPress files
 #   make core SKIP_CONTENT=yes  # skips wp-content during download
