@@ -1,0 +1,59 @@
+name: Deploy via rsync
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      DEPLOY_FOLDER: /home/username/public_html/ # Deploy directory on the production server
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install SSH key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.SSH_KEY }}
+          known_hosts: 'just-a-placeholder-so-we-dont-get-errors'
+
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v2
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
+
+      - name: Install PHP dependencies
+        run: composer install --prefer-dist --no-progress --no-dev
+
+      - name: Install and build JS dependencies
+        run: npm install && npx webpack ./index.js
+
+      - shell: bash
+        env:
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+        run: |
+          ssh-keyscan -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Create Release Dir On Remote
+        run: ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} -p ${{ secrets.SSH_PORT }} 'mkdir -p ${{ env.DEPLOY_FOLDER }}deploy/${{ github.sha }}'
+
+      - name: Push files to the remote
+        run: rsync -avz -e 'ssh -p ${{ secrets.SSH_PORT }}' --exclude-from=.rsyncignore ./ ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:${{ env.DEPLOY_FOLDER }}deploy/${{ github.sha }}
+
+      - name: Ensure shared symlinks
+        run: |
+          ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} -p ${{ secrets.SSH_PORT }} 'mkdir -p ${{ env.DEPLOY_FOLDER }}private/shared/uploads && mv ${{ env.DEPLOY_FOLDER }}deploy/${{ github.sha }}/wp-content/uploads ${{ env.DEPLOY_FOLDER }}deploy/${{ github.sha }}/wp-content/uploads_backup && ln -s ${{ env.DEPLOY_FOLDER }}private/shared/uploads ${{ env.DEPLOY_FOLDER }}deploy/${{ github.sha }}/wp-content && shopt -s dotglob && mv ${{ env.DEPLOY_FOLDER }}deploy/${{ github.sha }}/wp-content/uploads_backup/* ${{ env.DEPLOY_FOLDER }}deploy/${{ github.sha }}/wp-content/uploads/ && rmdir ${{ env.DEPLOY_FOLDER }}deploy/${{ github.sha }}/wp-content/uploads_backup'
+
+      #      - name: Share wp-config file
+      #        run: |
+      #          ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} -p ${{ secrets.SSH_PORT }} 'touch ${{ env.DEPLOY_FOLDER }}private/shared/wp-config.php && ln -sfn ${{ env.DEPLOY_FOLDER }}private/shared/wp-config.php ${{ env.DEPLOY_FOLDER }}deploy/${{ github.sha }}/wp-config.php'
+
+      - name: Promote production symlink
+        run: ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} -p ${{ secrets.SSH_PORT }} 'ln -sfn ${{ env.DEPLOY_FOLDER }}deploy/${{ github.sha }} ${{ env.DEPLOY_FOLDER }}public'
