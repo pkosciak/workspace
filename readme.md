@@ -49,18 +49,11 @@ docker-compose up -d
 3. Edit the `.env` file to name your project, preferably using the same name as the directory.
 4. Optionally: setup project specific mysql container (commented out in docker-compose file) or switch nginx with apache
 5. Place your application files into the `src` directory.
-6. In the project directory, run:
-
-```sh
-docker-compose up -d
-```
-
 6. Copy `minica.pem` from `traefik/certificates` to `projects/newproject1/.docker/php/certs`
-
 7. Run
 
 ```sh
-docker-compose up -d --build --force-recreate
+docker-compose up -d
 ```
 
 ## Step 5. Setup SSL certificates:
