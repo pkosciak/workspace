@@ -55,7 +55,7 @@ docker-compose up -d
 docker-compose up -d
 ```
 
-6. Copy `cert.pem` from `traefik/certificates/newproject1` to `projects/newproject1/.docker/php/certs`
+6. Copy `minica.pem` from `traefik/certificates` to `projects/newproject1/.docker/php/certs`
 
 7. Run
 
