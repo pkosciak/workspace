@@ -10,14 +10,12 @@ To ensure everything works flawlessly, follow these steps:
 
 ## Step 1. Traefik setup
 
-1. In `traefik` directory, run:
+In `traefik` directory, run:
 
 ```sh
 docker network create proxy
 docker-compose up -d
 ```
-
-2. Visit `traefik.test` in your browser.
 
 ## Step 2. MySQL setup
 
@@ -27,7 +25,7 @@ docker-compose up -d
 docker-compose up -d
 ```
 
-2. Access MySQL via MySQL Workbench, TablePlus, HeidiSQL, etc., using the following:
+2. You can access MySQL via MySQL Workbench, TablePlus, HeidiSQL, etc., using the following:
 
 - `mysql8`: Hostname `127.0.0.1`, Port `3306`, Username: `root`, Password: `root`
 - `mysql57`: Hostname `127.0.0.1`, Port `3307`, Username: `root`, Password: `root`
@@ -40,7 +38,7 @@ docker-compose up -d
 docker-compose up -d
 ```
 
-2. Visit `mailhog.test` in your browser.
+2. Visit `mailhog.test` in your browser to browse mails
 
 ## Step 4. Project setup
 
@@ -58,7 +56,7 @@ docker-compose up -d
 
 ## Step 5. Setup SSL certificates:
 
-This is one time step. MiniCA will create certificates automatically for each new project.
+This is one time step - you don't have to do it every time. MiniCA will create certificates automatically for each new project.
 
 1. Copy `traefik/certificates/minica.pem` to your local machine
 2. Run command
@@ -89,8 +87,6 @@ You can also set up each project with its own MySQL instance if specific configu
 
 For the project's MySQL instance, data is stored inside the `[project catalog]/.docker/mysql/data` directory.
 
-**Backup your data periodically to avoid data loss.**
-
 ### Executing commands in a project (e.g., composer install)
 
 Replace `APP_NAME` with your app name:
@@ -99,7 +95,7 @@ Replace `APP_NAME` with your app name:
 ```sh
 docker exec -it APP_NAME-php bash
 ```
-2. Execute command
+2. Execute command e.g.
 ```sh
 composer install
 ```
@@ -114,3 +110,4 @@ Include:
   - you can run a vulnerability scan with the following command:
   - `wordfence vuln-scan .`
 - Makefile with a few usefull scripts
+  - `make admin` - will create "admin" account with password "admin". To see list of all commands check Makefile
