@@ -8,7 +8,7 @@ ADMIN_PASS ?= admin
 ADMIN_EMAIL ?= admin@example.com
 
 # Create admin account with password admin
-adminacc:
+admin:
 	@echo "Ensuring admin user '$(ADMIN_USER)' exists in container '$(CONTAINER)'..."
 	@docker exec $(CONTAINER) bash -c '\
 		if wp user get $(ADMIN_USER) --field=ID --skip-themes --skip-plugins > /dev/null 2>&1; then \
@@ -26,6 +26,12 @@ wpvivid:
 	@echo "Installing and activating wpvivid-backuprestore plugin in container '$(CONTAINER)'..."
 	@docker exec $(CONTAINER) wp plugin install wpvivid-backuprestore --activate --skip-themes --skip-plugins
 	@echo "Plugin 'wpvivid-backuprestore' installed and activated." 
+
+# Install and activate better-search-replace plugin
+bsr:
+	@echo "Installing and activating better-search-replace plugin in container '$(CONTAINER)'..."
+	@docker exec $(CONTAINER) wp plugin install better-search-replace --activate --skip-themes --skip-plugins
+	@echo "Plugin 'better-search-replace' installed and activated." 
 
 # Usage:
 #   make core           # downloads all WordPress files
