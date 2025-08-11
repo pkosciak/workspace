@@ -43,14 +43,17 @@ RUN chmod +x /usr/local/bin/install-php-extensions && sync \
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
 # certificate
-RUN if [ -f ./.docker/php/certs/cert.pem ]; then \
-    cp ./.docker/php/certs/cert.pem /usr/local/share/ca-certificates/minica-ca.crt && \
-    apk add --no-cache ca-certificates && \
-    cp /usr/local/share/ca-certificates/minica-ca.crt /etc/ssl/certs/ && \
-    update-ca-certificates; \
-  else \
-    echo "No custom cert found, skipping cert install"; \
-  fi
+COPY .docker/php/certs/minica.pem /tmp/minica.pem
+RUN if [ -f /tmp/minica.pem ]; then \
+        echo "Certificate found, installing..." && \
+        apk add --no-cache ca-certificates && \
+        cp /tmp/minica.pem /usr/local/share/ca-certificates/minica-ca.crt && \
+        chmod 644 /usr/local/share/ca-certificates/minica-ca.crt && \
+        update-ca-certificates && \
+        echo "Certificate installed successfully"; \
+    else \
+        echo "No custom cert found, skipping cert install"; \
+    fi
 
 # wp-cli
 RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
