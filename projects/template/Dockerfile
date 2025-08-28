@@ -43,11 +43,7 @@ RUN chmod +x /usr/local/bin/install-php-extensions && sync \
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
 # certificate
-RUN if [ -f .docker/php/certs/minica.pem ]; then \
-        cp .docker/php/certs/minica.pem /tmp/minica.pem; \
-    else \
-        echo "Certificate file not found, skipping copy"; \
-    fi
+COPY .docker/php/certs/minica.pem /tmp/minica.pem
 RUN if [ -f /tmp/minica.pem ]; then \
         echo "Certificate found, installing..." && \
         apk add --no-cache ca-certificates && \
