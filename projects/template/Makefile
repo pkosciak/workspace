@@ -133,3 +133,9 @@ init:
 	@$(MAKE) config
 	@$(MAKE) wpvivid
 	@echo "Initialization complete."
+
+# Run Wordfence vulnerability scan inside PHP container
+scan:
+	@echo "Running Wordfence vulnerability scan in container '$(CONTAINER)'..."
+	@docker exec $(CONTAINER) bash -lc 'if [ -x /opt/venv/bin/wordfence ]; then /opt/venv/bin/wordfence vuln-scan .; else wordfence vuln-scan .; fi'
+	@echo "Wordfence vulnerability scan completed."
