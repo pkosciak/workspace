@@ -50,6 +50,8 @@ core:
 		--dbuser="root" \
 		--dbpass="root" \
 		--dbhost="mysql8"
+	@echo "Ensuring database '$(APP_NAME)' exists..."
+	@docker run --rm --network=proxy mysql:8 mysql -hmysql8 -uroot -proot -e "CREATE DATABASE IF NOT EXISTS $(APP_NAME) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
 	@echo "Installing WordPress core in container '$(CONTAINER)'..."
 	@docker exec $(CONTAINER) wp core install \
 		--url="https://$(APP_NAME).test" \
@@ -102,3 +104,32 @@ config:
 	@rm -f wp-config.dev.php
 
 	@echo "wp-config.php updated and wp-config.dev.php created (if not present)."
+
+# Initialize project: create DB if needed, install core, add dev config, install wpvivid
+init:
+	@echo "Initializing WordPress in container '$(CONTAINER)'..."
+	@echo "Downloading WordPress core..."
+	@if [ "$(SKIP_CONTENT)" = "yes" ]; then \
+		docker exec $(CONTAINER) wp core download --skip-content --force; \
+	else \
+		docker exec $(CONTAINER) wp core download --force; \
+	fi
+	@echo "Generating wp-config.php..."
+	@docker exec $(CONTAINER) wp config create \
+		--dbname="$(APP_NAME)" \
+		--dbuser="root" \
+		--dbpass="root" \
+		--dbhost="mysql8"
+	@echo "Ensuring database '$(APP_NAME)' exists..."
+	@docker run --rm --network=proxy mysql:8 mysql -hmysql8 -uroot -proot -e "CREATE DATABASE IF NOT EXISTS $(APP_NAME) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+	@echo "Installing WordPress core..."
+	@docker exec $(CONTAINER) wp core install \
+		--url="https://$(APP_NAME).test" \
+		--title="Example Site" \
+		--admin_user="$(ADMIN_USER)" \
+		--admin_password="$(ADMIN_PASS)" \
+		--admin_email="$(ADMIN_EMAIL)" \
+		--skip-themes --skip-plugins
+	@$(MAKE) config
+	@$(MAKE) wpvivid
+	@echo "Initialization complete."
